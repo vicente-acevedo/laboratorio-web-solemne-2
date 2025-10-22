@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CalculaDORA</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(225, 225, 225);
+            font-family: Arial, sans-serif;
+        }
+
+        .calculadora {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #pantalla {
+            width: 220px;
+            height: 40px;
+            margin-bottom: 10px;
+            font-size: 20px;
+            text-align: right;
+            padding: 5px;
+            border: 2px solid gray;
+            border-radius: 5px;
+        }
+
+        .botones {
+            display: grid;
+            grid-template-columns: repeat(4, 5);
+            gap: 8px;
+        }
+
+        button {
+            height: 45px;
+            font-size: 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .numero {
+            background-color: rgb(131, 223, 200);
+        }
+
+        .operador {
+            background-color: rgb(253, 176, 93);
+        }
+
+        .igual {
+            background-color: rgb(115, 160, 255);
+            color: rgb(255, 255, 255);
+            font-size: 30px;
+            grid-column: span 4;
+        }
+
+        .borrar {
+            background-color: rgb(228, 79, 79);
+            color: rgb(255, 255, 255);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="calculadora">
+        <input type="text" id="pantalla" disabled>
+        <div class="botones">
+            <button class="numero">7</button>
+            <button class="numero">8</button>
+            <button class="numero">9</button>
+            <button class="operador">/</button>
+
+            <button class="numero">4</button>
+            <button class="numero">5</button>
+            <button class="numero">6</button>
+            <button class="operador">*</button>
+
+            <button class="numero">1</button>
+            <button class="numero">2</button>
+            <button class="numero">3</button>
+            <button class="operador">-</button>
+
+            <button class="borrar">C</button>
+            <button class="numero">0</button>
+            <button class="numero">.</button>
+            <button class="operador">+</button>
+
+            <button class="igual">=</button>
+        </div>
+    </div>
+
+    <script>
+        let pantalla = document.getElementById('pantalla');
+        let numeros = document.getElementsByClassName('numero');
+        let operadores = document.getElementsByClassName('operador');
+        let botonIgual = document.getElementsByClassName('igual')[0];
+        let botonBorrar = document.getElementsByClassName('borrar')[0];
+
+        let valorActual = '';
+        let valorPrevio = '';
+        let operador = '';
+
+        // Números
+        for (let i = 0; i < numeros.length; i++) {
+            numeros[i].addEventListener('click', function() {
+                valorActual += numeros[i].innerText;
+                pantalla.value = valorActual;
+            });
+        }
+
+        // Operadores
+        for (let i = 0; i < operadores.length; i++) {
+            operadores[i].addEventListener('click', function() {
+                if (valorActual !== '') {
+                    operador = operadores[i].innerText;
+                    valorPrevio = valorActual;
+                    valorActual = '';
+                }
+            });
+        }
+
+        // Igual
+        botonIgual.addEventListener('click', function() {
+            if (valorPrevio !== '' && valorActual !== '' && operador !== '') {
+                let a = parseFloat(valorPrevio);
+                let b = parseFloat(valorActual);
+                let resultado = 0;
+
+                if (operador == '+') resultado = a + b;
+                if (operador == '-') resultado = a - b;
+                if (operador == '*') resultado = a * b;
+                if (operador == '/') resultado = a / b;
+
+                pantalla.value = resultado;
+                valorActual = resultado.toString();
+                valorPrevio = '';
+                operador = '';
+            }
+        });
+
+        // Borrar
+        botonBorrar.addEventListener('click', function() {
+            valorActual = '';
+            valorPrevio = '';
+            operador = '';
+            pantalla.value = '';
+        });
+    </script>
+</body>
+</html>
